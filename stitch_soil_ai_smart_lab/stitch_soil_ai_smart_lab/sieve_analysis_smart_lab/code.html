@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab - Sieve Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .semi-log-grid {
+            background-image: 
+                linear-gradient(to right, #334155 1px, transparent 1px),
+                linear-gradient(to bottom, #334155 1px, transparent 1px);
+            background-size: 10% 100%, 100% 10%;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 2px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#df7412",
+                        "surface-container-low": "#131b2e",
+                        "on-primary": "#002e6a",
+                        "surface": "#0b1326",
+                        "inverse-primary": "#005ac2",
+                        "on-tertiary-container": "#461f00",
+                        "secondary-fixed": "#acedff",
+                        "surface-dim": "#0b1326",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "outline-variant": "#424754",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-tint": "#adc6ff",
+                        "background": "#0b1326",
+                        "tertiary": "#ffb786",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-container": "#03b5d3",
+                        "charcoal-bg": "#0F172A",
+                        "on-tertiary-fixed": "#311400",
+                        "error-container": "#93000a",
+                        "data-text": "#94A3B8",
+                        "surface-container-high": "#222a3d",
+                        "emerald-status": "#10B981",
+                        "on-primary-container": "#00285d",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "inverse-on-surface": "#283044",
+                        "primary-container": "#4d8eff",
+                        "on-primary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "secondary": "#4cd7f6",
+                        "surface-variant": "#2d3449",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-secondary-container": "#00424e",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "primary-fixed": "#d8e2ff",
+                        "primary": "#adc6ff",
+                        "inverse-surface": "#dae2fd",
+                        "safety-orange": "#F97316",
+                        "on-background": "#dae2fd",
+                        "surface-container-lowest": "#060e20",
+                        "on-surface": "#dae2fd",
+                        "on-secondary-fixed": "#001f26",
+                        "slate-surface": "#1E293B",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary": "#502400",
+                        "on-secondary": "#003640",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-bright": "#31394d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "panel-split": "50%",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "data-tabular": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top AppBar -->
+<header class="w-full top-0 sticky z-50 flex justify-between items-center px-gutter py-base bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary font-headline-md text-headline-md" data-icon="precision_manufacturing">precision_manufacturing</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Soil AI Smart Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-status animate-pulse"></span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">FastAPI Bridge Connected</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-lg transition-colors" data-icon="settings">settings</button>
+</div>
+</header>
+<div class="flex h-[calc(100vh-112px)] overflow-hidden">
+<!-- Navigation Drawer -->
+<aside class="h-screen w-64 sticky left-0 bg-surface-container-low border-r border-outline-variant flex flex-col gap-2 p-4">
+<h2 class="font-label-mono text-label-mono text-primary uppercase tracking-widest mb-4">Engineering Modules</h2>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+                    Soil Classification
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary font-bold border-r-4 border-secondary bg-surface-container-high font-label-mono text-label-mono transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_on">grid_on</span>
+                    Sieve Analysis
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+                    CBR Prediction
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+                    Stability Analysis
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="foundation">foundation</span>
+                    Foundation Design
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="vertical_align_bottom">vertical_align_bottom</span>
+                    Settlement Analysis
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+                    Geological Modeling
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant font-label-mono text-label-mono hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                    AI Image Analysis
+                </a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Data Entry -->
+<section class="w-[400px] bg-slate-surface border-r border-outline-variant flex flex-col">
+<div class="p-4 border-b border-outline-variant flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">Sample Data</h3>
+<div class="bg-charcoal-bg p-1 rounded-lg flex border border-outline-variant">
+<button class="px-3 py-1 text-label-mono font-label-mono text-on-primary-container bg-primary-container rounded transition-all">Manual</button>
+<button class="px-3 py-1 text-label-mono font-label-mono text-on-surface-variant hover:text-on-surface transition-all">CSV</button>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-charcoal-bg border-b border-outline-variant sticky top-0">
+<th class="px-4 py-3 font-label-mono text-label-mono text-data-text uppercase tracking-tight">Sieve Size (mm)</th>
+<th class="px-4 py-3 font-label-mono text-label-mono text-data-text uppercase tracking-tight">% Passing</th>
+<th class="px-4 py-3"></th>
+</tr>
+</thead>
+<tbody class="font-data-tabular text-data-tabular divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="75.0"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="100.0"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="37.5"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="95.4"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="19.0"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="82.1"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="9.50"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="68.7"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="4.75"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="45.2"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="2.00"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="31.8"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="0.425"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="12.5"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-high transition-colors">
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full" type="text" value="0.075"/></td>
+<td class="px-4 py-2"><input class="bg-transparent border-none focus:ring-1 focus:ring-secondary w-full text-emerald-status" type="text" value="2.1"/></td>
+<td class="px-4 py-2 text-right"><span class="material-symbols-outlined text-on-surface-variant/50 text-sm cursor-pointer" data-icon="drag_handle">drag_handle</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant bg-charcoal-bg">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:scale-[0.98] transition-all">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+                        Push to Soil Classification
+                    </button>
+</div>
+</section>
+<!-- Right Panel: Visualization -->
+<section class="flex-1 bg-surface-container-lowest relative flex flex-col">
+<div class="p-6 flex-1">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Grain Size Distribution</h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant">Semi-logarithmic scale (mm)</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-label-mono text-label-mono">Current Sample</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+<span class="text-label-mono text-label-mono">AASHTO Range</span>
+</div>
+</div>
+</div>
+<!-- Chart Mockup -->
+<div class="w-full h-[500px] border border-outline-variant bg-charcoal-bg rounded-xl relative overflow-hidden group">
+<!-- Semi-log grid -->
+<div class="absolute inset-0 semi-log-grid opacity-20"></div>
+<!-- Axes -->
+<div class="absolute bottom-10 left-12 right-12 h-[1px] bg-outline"></div>
+<div class="absolute top-10 bottom-10 left-12 w-[1px] bg-outline"></div>
+<!-- Plotting Line (Visual Representation) -->
+<svg class="absolute inset-x-12 inset-y-10 w-[calc(100%-96px)] h-[calc(100%-80px)] overflow-visible" viewbox="0 0 800 400">
+<path class="animate-[draw_2s_ease-out_forwards]" d="M 0 0 Q 200 50, 400 150 T 800 380" fill="none" stroke="#4cd7f6" stroke-dasharray="1000" stroke-dashoffset="1000" stroke-width="3">
+<animate attributename="stroke-dashoffset" dur="2s" fill="freeze" from="1000" to="0"></animate>
+</path>
+<!-- Data points -->
+<circle cx="0" cy="0" fill="#4cd7f6" r="4"></circle>
+<circle cx="200" cy="50" fill="#4cd7f6" r="4"></circle>
+<circle cx="400" cy="150" fill="#4cd7f6" r="4"></circle>
+<circle cx="600" cy="280" fill="#4cd7f6" r="4"></circle>
+<circle cx="800" cy="380" fill="#4cd7f6" r="4"></circle>
+</svg>
+<!-- Labels -->
+<div class="absolute bottom-2 left-12 right-12 flex justify-between font-label-mono text-[10px] text-on-surface-variant">
+<span>100</span><span>10</span><span>1</span><span>0.1</span><span>0.01</span><span>0.001</span>
+</div>
+<div class="absolute left-2 top-10 bottom-10 flex flex-col justify-between font-label-mono text-[10px] text-on-surface-variant text-right w-8">
+<span>100%</span><span>75%</span><span>50%</span><span>25%</span><span>0%</span>
+</div>
+<!-- Hover Tooltip Mockup -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 border border-secondary/30 p-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+<p class="font-label-mono text-label-mono text-secondary mb-1">D60: 4.21mm</p>
+<p class="font-label-mono text-label-mono text-on-surface">Cu: 5.4 | Cc: 1.2</p>
+</div>
+</div>
+<!-- Summary Cards -->
+<div class="grid grid-cols-4 gap-4 mt-6">
+<div class="bg-slate-surface border border-outline-variant p-4 rounded-lg">
+<p class="text-on-surface-variant font-label-mono text-xs uppercase mb-1">Gravel</p>
+<p class="text-headline-md font-headline-md text-primary">54.8%</p>
+</div>
+<div class="bg-slate-surface border border-outline-variant p-4 rounded-lg">
+<p class="text-on-surface-variant font-label-mono text-xs uppercase mb-1">Sand</p>
+<p class="text-headline-md font-headline-md text-secondary">43.1%</p>
+</div>
+<div class="bg-slate-surface border border-outline-variant p-4 rounded-lg">
+<p class="text-on-surface-variant font-label-mono text-xs uppercase mb-1">Fines</p>
+<p class="text-headline-md font-headline-md text-tertiary">2.1%</p>
+</div>
+<div class="bg-slate-surface border border-outline-variant p-4 rounded-lg">
+<p class="text-on-surface-variant font-label-mono text-xs uppercase mb-1">Classification</p>
+<p class="text-headline-md font-headline-md text-emerald-status">SW-GW</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full bottom-0 fixed bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-margin-desktop py-4 h-16 z-50">
+<div class="flex items-center gap-6">
+<span class="font-body-md text-body-md text-on-surface">© 2024 Soil AI Smart Lab - Geotechnical Intelligence Systems</span>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 text-tertiary font-bold font-label-mono text-label-mono hover:text-tertiary-fixed-dim transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                    Export Graph Data (CSV)
+                </button>
+<button class="flex items-center gap-2 text-on-surface-variant font-label-mono text-label-mono hover:text-tertiary transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+                    AI Report Generation
+                </button>
+</div>
+</div>
+<div class="flex gap-4 items-center">
+<span class="font-label-mono text-label-mono text-on-surface-variant">System Latency: 42ms</span>
+<div class="w-2 h-2 rounded-full bg-emerald-status"></div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for manual/csv toggle
+        const toggleButtons = document.querySelectorAll('.bg-charcoal-bg button');
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggleButtons.forEach(b => {
+                    b.classList.remove('bg-primary-container', 'text-on-primary-container');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary-container', 'text-on-primary-container');
+                btn.classList.remove('text-on-surface-variant');
+            });
+        });
+
+        // Simulating data entry highlights
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.classList.add('bg-surface-container-highest');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.classList.remove('bg-surface-container-highest');
+            });
+        });
+    </script>
+</body></html>

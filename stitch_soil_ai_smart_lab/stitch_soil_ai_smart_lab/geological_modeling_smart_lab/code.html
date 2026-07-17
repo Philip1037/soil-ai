@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Geological Modeling | Soil AI Smart Lab</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#df7412",
+                    "surface-container-low": "#131b2e",
+                    "on-primary": "#002e6a",
+                    "surface": "#0b1326",
+                    "inverse-primary": "#005ac2",
+                    "on-tertiary-container": "#461f00",
+                    "secondary-fixed": "#acedff",
+                    "surface-dim": "#0b1326",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "outline-variant": "#424754",
+                    "on-primary-fixed-variant": "#004395",
+                    "surface-tint": "#adc6ff",
+                    "background": "#0b1326",
+                    "tertiary": "#ffb786",
+                    "error": "#ffb4ab",
+                    "surface-container-highest": "#2d3449",
+                    "secondary-container": "#03b5d3",
+                    "charcoal-bg": "#0F172A",
+                    "on-tertiary-fixed": "#311400",
+                    "error-container": "#93000a",
+                    "data-text": "#94A3B8",
+                    "surface-container-high": "#222a3d",
+                    "emerald-status": "#10B981",
+                    "on-primary-container": "#00285d",
+                    "on-error": "#690005",
+                    "surface-container": "#171f33",
+                    "inverse-on-surface": "#283044",
+                    "primary-container": "#4d8eff",
+                    "on-primary-fixed": "#001a42",
+                    "on-error-container": "#ffdad6",
+                    "on-surface-variant": "#c2c6d6",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "secondary": "#4cd7f6",
+                    "surface-variant": "#2d3449",
+                    "outline": "#8c909f",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "on-secondary-container": "#00424e",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "primary-fixed": "#d8e2ff",
+                    "primary": "#adc6ff",
+                    "inverse-surface": "#dae2fd",
+                    "safety-orange": "#F97316",
+                    "on-background": "#dae2fd",
+                    "surface-container-lowest": "#060e20",
+                    "on-surface": "#dae2fd",
+                    "on-secondary-fixed": "#001f26",
+                    "slate-surface": "#1E293B",
+                    "tertiary-fixed": "#ffdcc6",
+                    "on-tertiary": "#502400",
+                    "on-secondary": "#003640",
+                    "primary-fixed-dim": "#adc6ff",
+                    "surface-bright": "#31394d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "panel-split": "50%",
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "base": "4px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "data-tabular": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "label-mono": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        /* Custom scrollbar for engineering look */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0b1326; }
+        ::-webkit-scrollbar-thumb { background: #334155; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        .split-divider {
+            cursor: col-resize;
+            transition: background-color 0.2s;
+        }
+        .split-divider:hover {
+            background-color: #3b82f6;
+        }
+
+        /* 3D Model Atmosphere */
+        .viewport-grid {
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant z-50 flex justify-between items-center px-gutter py-base h-16">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary">Soil AI Smart Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 rounded bg-surface-container-high">
+<span class="w-2 h-2 rounded-full bg-emerald-status animate-pulse"></span>
+<span class="font-label-mono text-label-mono text-emerald-status">FastAPI Bridge Connected</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded transition-colors">settings</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded transition-colors">notifications</button>
+</div>
+</header>
+<div class="flex h-[calc(100vh-128px)]">
+<!-- NavigationDrawer -->
+<aside class="h-full w-64 sticky left-0 bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant dark:border-outline-variant flex flex-col gap-2 p-4 shrink-0">
+<h2 class="font-label-mono text-label-mono uppercase tracking-widest text-outline mb-4 px-2">Engineering Modules</h2>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-mono text-label-mono">Soil Classification</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">grid_on</span>
+<span class="font-label-mono text-label-mono">Sieve Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-mono text-label-mono">CBR Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-mono text-label-mono">Stability Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">foundation</span>
+<span class="font-label-mono text-label-mono">Foundation Design</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">vertical_align_bottom</span>
+<span class="font-label-mono text-label-mono">Settlement Analysis</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded bg-surface-container-high text-secondary font-bold border-r-4 border-secondary transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">public</span>
+<span class="font-label-mono text-label-mono">Geological Modeling</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-mono text-label-mono">AI Image Analysis</span>
+</a>
+</nav>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-grow flex overflow-hidden">
+<!-- Left Panel: Data Entry & Metrics -->
+<section class="w-[400px] bg-slate-surface border-r border-outline-variant overflow-y-auto p-6 flex flex-col gap-8 shrink-0">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1">Project Analysis</h3>
+<p class="font-label-mono text-label-mono text-outline uppercase">Subsurface Profile Mapping</p>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-outline">Project Name</label>
+<input class="w-full bg-surface border border-outline-variant rounded p-3 text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="NE-Sector-2024-SiteA" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-outline">Location</label>
+<div class="relative">
+<input class="w-full bg-surface border border-outline-variant rounded p-3 pl-10 text-on-surface outline-none" type="text" value="40.7128° N, 74.0060° W"/>
+<span class="material-symbols-outlined absolute left-3 top-3.5 text-outline text-[20px]">location_on</span>
+</div>
+</div>
+</div>
+<!-- Toggle Selector -->
+<div class="bg-surface p-1 rounded border border-outline-variant flex gap-1">
+<button class="flex-grow py-2 rounded bg-primary-container text-on-primary-container font-label-mono text-label-mono font-bold">Borehole</button>
+<button class="flex-grow py-2 rounded hover:bg-surface-container-high text-on-surface-variant font-label-mono text-label-mono">CPT</button>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low border border-outline-variant p-3 rounded">
+<div class="text-secondary font-headline-md font-data-tabular">24</div>
+<div class="text-[10px] text-outline uppercase font-bold">Boreholes</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-3 rounded">
+<div class="text-tertiary font-headline-md font-data-tabular">12</div>
+<div class="text-[10px] text-outline uppercase font-bold">CPT Tests</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-3 rounded">
+<div class="text-emerald-status font-headline-md font-data-tabular">08</div>
+<div class="text-[10px] text-outline uppercase font-bold">Total Layers</div>
+</div>
+</div>
+<!-- Dropzone -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-8 flex flex-col items-center justify-center text-center gap-3 bg-surface-container-lowest hover:border-primary transition-colors group cursor-pointer">
+<span class="material-symbols-outlined text-[48px] text-outline group-hover:text-primary transition-colors">cloud_upload</span>
+<div>
+<p class="font-body-md text-on-surface">Drag &amp; Drop Log Files</p>
+<p class="text-[12px] text-outline">Supports .CSV, .AGS, .LAS</p>
+</div>
+</div>
+</section>
+<!-- Resize Divider -->
+<div class="w-1 bg-outline-variant split-divider"></div>
+<!-- Right Panel: 3D Visualization -->
+<section class="flex-grow relative bg-surface-container-lowest viewport-grid overflow-hidden">
+<div class="absolute top-6 left-6 z-10 bg-surface/80 backdrop-blur-md border border-outline-variant p-4 rounded-lg flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-blue-500 rounded-sm"></div>
+<span class="font-label-mono text-label-mono">Soft Marine Clay</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-amber-600 rounded-sm"></div>
+<span class="font-label-mono text-label-mono">Dense Silty Sand</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 bg-emerald-700 rounded-sm"></div>
+<span class="font-label-mono text-label-mono">Glacial Till</span>
+</div>
+<div class="mt-2 pt-2 border-t border-outline-variant flex gap-4">
+<button class="material-symbols-outlined text-outline hover:text-primary">zoom_in</button>
+<button class="material-symbols-outlined text-outline hover:text-primary">zoom_out</button>
+<button class="material-symbols-outlined text-outline hover:text-primary">3d_rotation</button>
+<button class="material-symbols-outlined text-outline hover:text-primary">visibility</button>
+</div>
+</div>
+<!-- 3D Model Placeholder -->
+<div class="w-full h-full flex items-center justify-center relative">
+<div class="w-[80%] h-[80%] relative group">
+<img alt="3D Subsurface Stratigraphy" class="w-full h-full object-contain drop-shadow-2xl filter contrast-125 saturate-50" data-alt="A highly detailed 3D cross-section model of subsurface geological strata presented on a digital dark-mode dashboard. The visualization features distinct layers of colored earth including deep ochre sands, blue clays, and dark grey rock foundations. Transparent technical lines and borehole markers pierce through the model, with a glowing emerald data grid underneath. The lighting is focused and cinematic, highlighting the geological textures within a professional engineering software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH_edEd9TPVnDoJ-Vd6oSejFSaln0qSZmb12Ib0cRDO1xkylasOFHPJ3M6rnN4-rfJGzV1rJfh4pgcRW-GZrr018T9A6vzo2cJUMzZRa7rffCEZELSAJUi87Kh0GENzrlMzdoh6T0olRH5HIhZntcPrA82-H8FIAn-iZstxQ19EczMglSvgCezsXJsLIi_4ohebYwjIsRg9cm1y-S4TvMW6GXWL_WJKkpL6sRcS6Zc4t3pxOKjvR7vmOMnwoyYCb6US10bno4WPuQ"/>
+<!-- HUD Overlays -->
+<div class="absolute top-1/4 right-0 bg-secondary/10 border border-secondary text-secondary p-2 font-data-tabular text-[12px] animate-pulse">
+                            Z-AXIS: -42.5m
+                        </div>
+<div class="absolute bottom-1/4 left-10 bg-primary/10 border border-primary text-primary p-2 font-data-tabular text-[12px]">
+                            LAT: 40.7128°
+                        </div>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 flex gap-3">
+<button class="px-4 py-2 bg-surface-container-high border border-outline-variant text-on-surface font-label-mono text-label-mono rounded hover:bg-surface-bright transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">layers</span>
+                        Isometric View
+                    </button>
+<button class="px-4 py-2 bg-surface-container-high border border-outline-variant text-on-surface font-label-mono text-label-mono rounded hover:bg-surface-bright transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">settings_overscan</span>
+                        Cross Section
+                    </button>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full bottom-0 fixed bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline-variant flex justify-between items-center px-margin-desktop py-4 h-16 z-50">
+<div class="flex items-center gap-4">
+<span class="font-label-mono text-label-mono text-on-surface-variant">© 2024 Soil AI Smart Lab - Geotechnical Intelligence Systems</span>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 text-tertiary font-bold font-label-mono text-label-mono hover:text-tertiary-fixed-dim transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                Export Graph Data (CSV)
+            </button>
+<button class="flex items-center gap-2 px-6 py-2 bg-tertiary text-on-tertiary font-bold font-label-mono text-label-mono rounded hover:opacity-90 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                AI Report Generation
+            </button>
+</div>
+</footer>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.classList.add('scale-95');
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.classList.remove('scale-95');
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.classList.remove('scale-95');
+            });
+        });
+
+        // Simulating interactive 3D feel on mouse move over the image
+        const modelContainer = document.querySelector('section.flex-grow');
+        const modelImage = modelContainer.querySelector('img');
+        
+        modelContainer.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            modelImage.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        modelContainer.addEventListener('mouseleave', () => {
+            modelImage.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            modelImage.style.transition = 'all 0.5s ease';
+        });
+
+        modelContainer.addEventListener('mouseenter', () => {
+            modelImage.style.transition = 'none';
+        });
+    </script>
+</body></html>

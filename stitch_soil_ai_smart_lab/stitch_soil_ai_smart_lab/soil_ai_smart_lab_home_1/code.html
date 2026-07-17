@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab | Precision Geotechnical Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "charcoal-bg": "#0F172A",
+                    "on-primary": "#002e6a",
+                    "on-tertiary": "#502400",
+                    "secondary-container": "#03b5d3",
+                    "secondary-fixed-dim": "#4cd7f6",
+                    "outline": "#8c909f",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-lowest": "#060e20",
+                    "inverse-primary": "#005ac2",
+                    "surface-container-highest": "#2d3449",
+                    "primary-fixed-dim": "#adc6ff",
+                    "on-secondary-fixed": "#001f26",
+                    "background": "#0b1326",
+                    "on-secondary-fixed-variant": "#004e5c",
+                    "inverse-surface": "#dae2fd",
+                    "on-surface": "#dae2fd",
+                    "surface-container": "#171f33",
+                    "outline-variant": "#424754",
+                    "on-primary-fixed-variant": "#004395",
+                    "error-container": "#93000a",
+                    "error": "#ffb4ab",
+                    "surface-container-low": "#131b2e",
+                    "tertiary-container": "#df7412",
+                    "on-tertiary-fixed": "#311400",
+                    "surface-tint": "#adc6ff",
+                    "data-text": "#94A3B8",
+                    "primary": "#adc6ff",
+                    "on-surface-variant": "#c2c6d6",
+                    "surface-container-high": "#222a3d",
+                    "surface-dim": "#0b1326",
+                    "on-tertiary-container": "#461f00",
+                    "on-secondary": "#003640",
+                    "emerald-status": "#10B981",
+                    "slate-surface": "#1E293B",
+                    "on-background": "#dae2fd",
+                    "on-secondary-container": "#00424e",
+                    "on-error": "#690005",
+                    "tertiary": "#ffb786",
+                    "surface": "#0b1326",
+                    "tertiary-fixed-dim": "#ffb786",
+                    "surface-bright": "#31394d",
+                    "secondary-fixed": "#acedff",
+                    "safety-orange": "#F97316",
+                    "on-primary-container": "#00285d",
+                    "inverse-on-surface": "#283044",
+                    "on-tertiary-fixed-variant": "#723600",
+                    "surface-variant": "#2d3449",
+                    "secondary": "#4cd7f6",
+                    "primary-fixed": "#d8e2ff",
+                    "primary-container": "#4d8eff",
+                    "on-primary-fixed": "#001a42",
+                    "tertiary-fixed": "#ffdcc6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-desktop": "32px",
+                    "gutter": "16px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "panel-split": "50%"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "data-tabular": ["JetBrains Mono"],
+                    "label-mono": ["JetBrains Mono"],
+                    "body-lg": ["Inter"],
+                    "headline-xl": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-border {
+            box-shadow: 0 0 0 1px rgba(173, 198, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glow-border:hover {
+            box-shadow: 0 0 15px rgba(76, 215, 246, 0.3), 0 0 0 1px rgba(76, 215, 246, 0.5);
+            border-color: #4cd7f6;
+        }
+        .animate-status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .technical-bg {
+            background-image: linear-gradient(to bottom, rgba(11, 19, 38, 0.85), rgba(11, 19, 38, 0.95)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuBkWA2s6lOsS6Sui0VdAKrqz6YpfcVZN4MIn7GSvMBBjrXK1nntniHrtBoCo1cezmD3exKTSP14OdSG8NndYXeJ0VarySNAnmegPF_5njx0zH-O5LqLO4tUGxH9pnJbVF7pnm-_IoVnYEdMuP2u-2uAjd-y1c1BLrn1kuis98bthNHFrGfaayV9p3IqcIEeT9NOXPqnYHIWr3H9wAlnMsORrqxJlH6LlNzeFcsnDld9Y512u8sGw1jT0dw3WIoDodjzJFwKtIKiK9s');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .splitter-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #424754, transparent);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant flex justify-between items-center px-margin-desktop h-20">
+<div class="flex items-center gap-base">
+<span class="material-symbols-outlined text-primary text-headline-lg" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-headline-lg text-headline-lg text-primary tracking-tight">Soil AI Smart Lab</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="font-label-mono text-label-mono text-primary border-b-2 border-primary pb-1" href="#">Workstation</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors" href="#">Lab Reports</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors" href="#">API Docs</a>
+</nav>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-emerald-status animate-status-pulse"></span>
+<span class="font-label-mono text-data-tabular uppercase tracking-wider text-emerald-status">System Online</span>
+</div>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative technical-bg min-h-[85vh] flex flex-col justify-center px-margin-desktop py-24 overflow-hidden">
+<div class="relative z-10 max-w-5xl">
+<h1 class="font-headline-xl text-headline-xl text-primary mb-4 leading-tight">
+                    Soil AI Smart Lab
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mb-12">
+                    Transforming Geotechnical Analysis through Machine Learning Precision. Access real-time borehole telemetry, automated classification, and advanced predictive modeling in a unified slate-engineering environment.
+                </p>
+<div class="flex flex-wrap gap-6 mb-16">
+<button class="px-8 py-4 bg-gradient-to-r from-secondary to-primary text-on-primary font-headline-md rounded-lg shadow-lg hover:shadow-primary/20 hover:scale-[1.02] transition-all duration-300 flex items-center gap-3 group">
+                        Launch Interactive Workstation
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">terminal</span>
+</button>
+<button class="px-8 py-4 border border-outline text-on-surface font-headline-md rounded-lg hover:bg-surface-container-high transition-colors">
+                        View Documentation
+                    </button>
+</div>
+<!-- Metrics Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg glow-border group">
+<div class="text-data-text font-label-mono text-label-mono mb-2 flex items-center justify-between">
+                            Total Samples
+                            <span class="material-symbols-outlined text-secondary opacity-0 group-hover:opacity-100 transition-opacity">database</span>
+</div>
+<div class="text-secondary font-data-tabular text-headline-md">14,282</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg glow-border group">
+<div class="text-data-text font-label-mono text-label-mono mb-2 flex items-center justify-between">
+                            Classification Accuracy
+                            <span class="material-symbols-outlined text-emerald-status opacity-0 group-hover:opacity-100 transition-opacity">verified</span>
+</div>
+<div class="text-emerald-status font-data-tabular text-headline-md">98.4%</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg glow-border group">
+<div class="text-data-text font-label-mono text-label-mono mb-2 flex items-center justify-between">
+                            Active Projects
+                            <span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">engineering</span>
+</div>
+<div class="text-primary font-data-tabular text-headline-md">42</div>
+</div>
+<div class="bg-surface-container-low border border-outline-variant p-6 rounded-lg glow-border group">
+<div class="text-data-text font-label-mono text-label-mono mb-2 flex items-center justify-between">
+                            System Bridge
+                            <span class="material-symbols-outlined text-safety-orange opacity-0 group-hover:opacity-100 transition-opacity">hub</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="bg-emerald-status/10 border border-emerald-status/30 text-emerald-status text-[10px] font-label-mono px-2 py-0.5 rounded uppercase">FastAPI Connected</div>
+<span class="text-on-surface-variant font-data-tabular text-headline-md">:8000</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Atmospheric Element -->
+<div class="absolute right-0 top-0 w-1/3 h-full pointer-events-none opacity-20">
+<div class="w-full h-full border-l border-outline-variant" style="background-image: radial-gradient(circle at center, #4cd7f6 1px, transparent 1px); background-size: 24px 24px;"></div>
+</div>
+</section>
+<!-- Capabilities Grid -->
+<section class="bg-charcoal-bg py-24 px-margin-desktop">
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-2">
+<div class="h-px flex-grow bg-outline-variant"></div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface text-center px-4">Core Laboratory Capabilities</h2>
+<div class="h-px flex-grow bg-outline-variant"></div>
+</div>
+<p class="text-center text-data-text font-label-mono uppercase tracking-[0.2em]">Engineered for ISO 17025 Compliance</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Module 1 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">layers</span>
+</div>
+<span class="material-symbols-outlined text-primary mb-4" style="font-variation-settings: 'FILL' 1;">layers</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Soil Classification</h3>
+<p class="text-data-text font-body-md mb-4">Automated USCS/AASHTO classification via Atterberg limits and plasticity index mapping.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">ATTERBERG</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">USCS</span>
+</div>
+</div>
+<!-- Module 2 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">grain</span>
+</div>
+<span class="material-symbols-outlined text-secondary mb-4" style="font-variation-settings: 'FILL' 1;">grain</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Sieve Analysis</h3>
+<p class="text-data-text font-body-md mb-4">Particle size distribution curves with D10, D30, D60 calculation and hydrometer integration.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">ASTM D422</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">PARTICLE SIZE</span>
+</div>
+</div>
+<!-- Module 3 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">compress</span>
+</div>
+<span class="material-symbols-outlined text-safety-orange mb-4" style="font-variation-settings: 'FILL' 1;">compress</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">CBR Prediction</h3>
+<p class="text-data-text font-body-md mb-4">Regression-based prediction of California Bearing Ratio from Proctor compaction data.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">SUBGRADE</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">AASHTO T193</span>
+</div>
+</div>
+<!-- Module 4 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">monitoring</span>
+</div>
+<span class="material-symbols-outlined text-emerald-status mb-4" style="font-variation-settings: 'FILL' 1;">monitoring</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Stability Analysis</h3>
+<p class="text-data-text font-body-md mb-4">Critical slip circle identification using Bishop, Janbu, and AI-optimized Morgenstern-Price methods.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">SLOPE</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">FS RATIO</span>
+</div>
+</div>
+<!-- Module 5 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">foundation</span>
+</div>
+<span class="material-symbols-outlined text-primary mb-4" style="font-variation-settings: 'FILL' 1;">foundation</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Foundation Design</h3>
+<p class="text-data-text font-body-md mb-4">Shallow footing and deep pile load capacity calculations with automated factor-of-safety checks.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">BEARING</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">LFRD</span>
+</div>
+</div>
+<!-- Module 6 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">history</span>
+</div>
+<span class="material-symbols-outlined text-secondary mb-4" style="font-variation-settings: 'FILL' 1;">history</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Settlement Analysis</h3>
+<p class="text-data-text font-body-md mb-4">Time-dependent consolidation curves and primary/secondary settlement forecasting.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">TERZAGHI</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">ISOCHRONES</span>
+</div>
+</div>
+<!-- Module 7 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">view_in_ar</span>
+</div>
+<span class="material-symbols-outlined text-safety-orange mb-4" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Geological Modeling</h3>
+<p class="text-data-text font-body-md mb-4">3D borehole visualization and CPT/SPT stratigraphy interpolation for site-wide modeling.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">3D MESH</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">LIDAR DATA</span>
+</div>
+</div>
+<!-- Module 8 -->
+<div class="bg-slate-surface border border-outline-variant p-8 rounded-lg glow-border relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-2 opacity-10 group-hover:opacity-30 transition-opacity">
+<span class="material-symbols-outlined text-[4rem]">visibility</span>
+</div>
+<span class="material-symbols-outlined text-emerald-status mb-4" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-3">AI Image Analysis</h3>
+<p class="text-data-text font-body-md mb-4">Computer vision particle masking and shape morphology using convolutional neural networks.</p>
+<div class="flex gap-2">
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">CNN</span>
+<span class="text-[10px] font-label-mono border border-outline-variant px-1.5 py-0.5 rounded text-on-surface-variant">MASK R-CNN</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Footer Panel -->
+<section class="bg-surface-container-low border-t border-outline-variant px-margin-desktop py-12">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-6">Technical Compliance</h4>
+<ul class="space-y-4 font-label-mono text-data-text">
+<li class="flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            ASTM D2487 (Standard Practice for Classification)
+                        </li>
+<li class="flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            ASTM D422 (Particle-Size Analysis)
+                        </li>
+<li class="flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            ASTM D1883 (CBR Laboratory Tests)
+                        </li>
+<li class="flex items-center gap-3">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                            AASHTO M145 (Soil Classification)
+                        </li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-6">Infrastructure Diagnostics</h4>
+<div class="bg-charcoal-bg p-6 rounded-lg border border-outline-variant font-data-tabular">
+<div class="flex justify-between items-center mb-4">
+<span class="text-on-surface-variant">Backend Engine</span>
+<span class="text-emerald-status">FastAPI 0.103+</span>
+</div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-on-surface-variant">Local Gateway</span>
+<span class="text-secondary">localhost:8000</span>
+</div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-on-surface-variant">Database Latency</span>
+<span class="text-emerald-status">4.2ms</span>
+</div>
+<div class="h-1 w-full bg-outline-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-4/5"></div>
+</div>
+</div>
+</div>
+<div>
+<h4 class="font-headline-md text-headline-md text-on-surface mb-6">Documentation Index</h4>
+<div class="grid grid-cols-2 gap-4">
+<a class="p-3 border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-label-mono text-data-text" href="#">API Reference</a>
+<a class="p-3 border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-label-mono text-data-text" href="#">User Manual</a>
+<a class="p-3 border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-label-mono text-data-text" href="#">Change Log</a>
+<a class="p-3 border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-label-mono text-data-text" href="#">Support Ticket</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Global Footer -->
+<footer class="bg-charcoal-bg border-t border-outline-variant px-margin-desktop py-12 w-full grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="flex flex-col justify-between">
+<div>
+<span class="font-headline-md text-headline-md text-on-surface block mb-4">Soil AI Smart Lab</span>
+<p class="font-label-mono text-label-mono text-data-text">© 2024 Soil AI Smart Lab. All rights reserved. ISO 17025 Compliant.</p>
+</div>
+<div class="mt-8 md:mt-0">
+<div class="flex gap-2 items-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">security</span>
+<span class="font-label-mono text-label-mono text-data-text">Encrypted Data Transfer Active</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:items-end justify-between">
+<div class="flex flex-wrap gap-6 font-label-mono text-label-mono">
+<a class="text-data-text hover:text-primary underline transition-all duration-200" href="#">Documentation</a>
+<a class="text-data-text hover:text-primary underline transition-all duration-200" href="#">API Reference</a>
+<a class="text-data-text hover:text-primary underline transition-all duration-200" href="#">System Status</a>
+<a class="text-data-text hover:text-primary underline transition-all duration-200" href="#">Privacy Policy</a>
+</div>
+<div class="mt-8 flex items-center gap-4 text-data-text text-[12px] font-label-mono">
+<span>V2.4.0-STABLE</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>BUILD_7294</span>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for technical atmosphere
+        document.querySelectorAll('.glow-border').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Simulating periodic console data log
+        setInterval(() => {
+            console.log(`[SYS] Latency: ${ (Math.random() * 5 + 2).toFixed(1) }ms | Buffer: ${ (Math.random() * 100).toFixed(0) }% | Status: OK`);
+        }, 10000);
+    </script>
+</body></html>

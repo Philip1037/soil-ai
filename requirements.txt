@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+openpyxl
+pandas
+python-docx
+matplotlib
+scikit-learn==1.4.2
+xgboost
+lightgbm

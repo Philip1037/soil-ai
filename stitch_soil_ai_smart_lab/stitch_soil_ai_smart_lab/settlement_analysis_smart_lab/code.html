@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab - Settlement Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#df7412",
+                      "surface-container-low": "#131b2e",
+                      "on-primary": "#002e6a",
+                      "surface": "#0b1326",
+                      "inverse-primary": "#005ac2",
+                      "on-tertiary-container": "#461f00",
+                      "secondary-fixed": "#acedff",
+                      "surface-dim": "#0b1326",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "outline-variant": "#424754",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-tint": "#adc6ff",
+                      "background": "#0b1326",
+                      "tertiary": "#ffb786",
+                      "error": "#ffb4ab",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-container": "#03b5d3",
+                      "charcoal-bg": "#0F172A",
+                      "on-tertiary-fixed": "#311400",
+                      "error-container": "#93000a",
+                      "data-text": "#94A3B8",
+                      "surface-container-high": "#222a3d",
+                      "emerald-status": "#10B981",
+                      "on-primary-container": "#00285d",
+                      "on-error": "#690005",
+                      "surface-container": "#171f33",
+                      "inverse-on-surface": "#283044",
+                      "primary-container": "#4d8eff",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "secondary": "#4cd7f6",
+                      "surface-variant": "#2d3449",
+                      "outline": "#8c909f",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "on-secondary-container": "#00424e",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "primary-fixed": "#d8e2ff",
+                      "primary": "#adc6ff",
+                      "inverse-surface": "#dae2fd",
+                      "safety-orange": "#F97316",
+                      "on-background": "#dae2fd",
+                      "surface-container-lowest": "#060e20",
+                      "on-surface": "#dae2fd",
+                      "on-secondary-fixed": "#001f26",
+                      "slate-surface": "#1E293B",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-tertiary": "#502400",
+                      "on-secondary": "#003640",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-bright": "#31394d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "panel-split": "50%",
+                      "margin-desktop": "32px",
+                      "gutter": "16px",
+                      "base": "4px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "data-tabular": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "label-mono": ["JetBrains Mono"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-engineering::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollbar-engineering::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        .scrollbar-engineering::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .log-grid {
+            background-image: 
+                linear-gradient(to right, #1e293b 1px, transparent 1px),
+                linear-gradient(to bottom, #1e293b 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden flex flex-col h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant flex justify-between items-center px-gutter py-base h-16 z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" data-icon="precision_manufacturing">precision_manufacturing</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Soil AI Smart Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-status animate-pulse"></span>
+<span class="font-label-mono text-label-mono text-emerald-status">FastAPI Bridge Connected</span>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 transition-colors rounded" data-icon="settings">settings</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="h-full w-64 bg-surface-container-low border-r border-outline-variant flex flex-col shrink-0">
+<div class="p-4">
+<h2 class="font-label-mono text-label-mono text-on-surface-variant uppercase tracking-widest mb-4">Engineering Modules</h2>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="layers">layers</span>
+<span class="font-label-mono text-label-mono">Soil Classification</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="grid_on">grid_on</span>
+<span class="font-label-mono text-label-mono">Sieve Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="trending_up">trending_up</span>
+<span class="font-label-mono text-label-mono">CBR Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="account_tree">account_tree</span>
+<span class="font-label-mono text-label-mono">Stability Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="foundation">foundation</span>
+<span class="font-label-mono text-label-mono">Foundation Design</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-secondary font-bold border-r-4 border-secondary bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="vertical_align_bottom">vertical_align_bottom</span>
+<span class="font-label-mono text-label-mono">Settlement Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="public">public</span>
+<span class="font-label-mono text-label-mono">Geological Modeling</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-high transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="font-label-mono text-label-mono">AI Image Analysis</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-4 border-t border-outline-variant">
+<div class="flex items-center gap-3 p-2 bg-slate-surface rounded-lg">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container text-body-md" data-icon="person">person</span>
+</div>
+<div>
+<p class="text-label-mono text-on-surface font-bold leading-none">Engr. Davila</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Senior Analyst</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content (Split Screen) -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Data Entry -->
+<section class="w-[400px] border-r border-outline-variant bg-surface flex flex-col shrink-0 overflow-y-auto scrollbar-engineering">
+<div class="p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Input Parameters</h3>
+<button class="flex items-center gap-2 px-3 py-1 text-label-mono bg-secondary-container text-on-secondary-container rounded hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-[16px]" data-icon="link">link</span>
+                            Pull Footing
+                        </button>
+</div>
+<div class="space-y-4">
+<!-- Numerical Inputs -->
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Applied Load (kN)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-secondary focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all" type="number" value="2500"/>
+</div>
+<div class="space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Layer Thick (m)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-secondary focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all" type="number" value="12.5"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Width B (m)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="4.0"/>
+</div>
+<div class="space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Length L (m)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="number" value="4.0"/>
+</div>
+</div>
+<hr class="border-outline-variant my-4"/>
+<h4 class="text-label-mono text-secondary-fixed-dim text-[12px] font-bold uppercase mb-2">Soil Properties</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1 space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Initial Void Ratio (e₀)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface" step="0.01" type="number" value="0.85"/>
+</div>
+<div class="flex-1 space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Compression Index (Cc)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface" step="0.01" type="number" value="0.32"/>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1 space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Permeability (k)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface" type="text" value="1.2e-9"/>
+</div>
+<div class="flex-1 space-y-1">
+<label class="text-label-mono text-on-surface-variant text-[11px] uppercase">Consolidation (Cv)</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant px-3 py-2 font-data-tabular text-on-surface" type="text" value="0.0045"/>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary font-bold py-3 flex items-center justify-center gap-2 hover:bg-primary-fixed-dim transition-all active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+                                CALCULATE SETTLEMENT
+                            </button>
+</div>
+</div>
+</div>
+<div class="mt-auto p-6 bg-surface-container-lowest">
+<div class="flex items-start gap-4 p-4 border border-outline-variant rounded-lg bg-surface">
+<span class="material-symbols-outlined text-safety-orange" data-icon="warning">warning</span>
+<div class="text-[12px] font-label-mono">
+<span class="text-safety-orange block font-bold mb-1">SYSTEM ALERT</span>
+<p class="text-on-surface-variant">Applied load exceeds pre-consolidation pressure. Primary consolidation will be significant.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Panel: Visualization -->
+<section class="flex-1 bg-slate-surface flex flex-col relative">
+<div class="p-6 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Consolidation Curve</h3>
+<p class="text-label-mono text-[12px] text-on-surface-variant">Time (Logarithmic Horizon) vs. Settlement Rate</p>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-surface-container-high border border-outline-variant text-label-mono text-[12px] hover:text-primary transition-colors">YRS 0-10</button>
+<button class="px-3 py-1 bg-primary text-on-primary border border-primary text-label-mono text-[12px]">YRS 10-50</button>
+</div>
+</div>
+<!-- Interactive Chart Area -->
+<div class="flex-1 relative p-12 overflow-hidden log-grid">
+<!-- Placeholder Chart Visualization -->
+<div class="w-full h-full border-l border-b border-outline relative">
+<!-- Simulated Data Series -->
+<svg class="absolute inset-0 w-full h-full overflow-visible" viewbox="0 0 1000 500">
+<path d="M0 50 C 100 100, 300 350, 600 420 L 1000 450" fill="none" stroke="#4cd7f6" stroke-width="3"></path>
+<path d="M0 50 C 100 80, 400 200, 1000 220" fill="none" stroke="#10B981" stroke-dasharray="8 4" stroke-width="2"></path>
+<!-- Highlight Dot -->
+<circle class="animate-pulse" cx="600" cy="420" fill="#4cd7f6" r="6"></circle>
+<text class="fill-secondary font-label-mono text-[14px]" x="615" y="415">42.4 mm @ 32.5 Years</text>
+</svg>
+<!-- Labels -->
+<div class="absolute -left-12 top-0 h-full flex flex-col justify-between text-[10px] text-on-surface-variant font-label-mono">
+<span>0mm</span>
+<span>25mm</span>
+<span>50mm</span>
+<span>75mm</span>
+<span>100mm</span>
+</div>
+<div class="absolute -bottom-8 left-0 w-full flex justify-between text-[10px] text-on-surface-variant font-label-mono">
+<span>1 DAY</span>
+<span>1 MONTH</span>
+<span>1 YEAR</span>
+<span>10 YEARS</span>
+<span>50 YEARS</span>
+</div>
+</div>
+</div>
+<!-- Footer Summary Bar -->
+<div class="h-24 bg-surface-container flex items-center px-12 gap-12 border-t border-outline-variant">
+<div class="flex flex-col">
+<span class="text-label-mono text-[11px] text-on-surface-variant uppercase">Final Primary (Sc)</span>
+<span class="text-headline-md text-secondary font-data-tabular">112.45 mm</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-mono text-[11px] text-on-surface-variant uppercase">Time to 90% (t90)</span>
+<span class="text-headline-md text-on-surface font-data-tabular">8.2 Years</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-mono text-[11px] text-on-surface-variant uppercase">Degree (U%) @ Current</span>
+<span class="text-headline-md text-emerald-status font-data-tabular">74.2%</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full bottom-0 sticky bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-margin-desktop h-16 shrink-0 z-50">
+<div class="flex items-center gap-6">
+<span class="font-label-mono text-label-mono text-tertiary">© 2024 Soil AI Smart Lab - Geotechnical Intelligence Systems</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-2 text-label-mono text-on-surface-variant hover:text-tertiary-fixed-dim transition-opacity cursor-pointer group">
+<span class="material-symbols-outlined text-[18px]" data-icon="csv">csv</span>
+                Export Graph Data (CSV)
+            </button>
+<div class="h-4 w-[1px] bg-outline-variant"></div>
+<button class="flex items-center gap-2 text-label-mono text-on-surface-variant hover:text-tertiary-fixed-dim transition-opacity cursor-pointer group">
+<span class="material-symbols-outlined text-[18px]" data-icon="auto_awesome">auto_awesome</span>
+                AI Report Generation
+            </button>
+</div>
+</footer>
+<!-- Atmosphere/Interaction Script -->
+<script>
+        // Simple micro-interactions for UI feedback
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').style.color = '#4cd7f6';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').style.color = '';
+            });
+        });
+
+        // Simulating some dynamic value changes
+        setInterval(() => {
+            const statusLabel = document.querySelector('.animate-pulse');
+            if(statusLabel) {
+                // Keep the "heartbeat" effect going
+            }
+        }, 2000);
+    </script>
+</body></html>

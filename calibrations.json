@@ -1,0 +1,9 @@
+{
+  "status": "calibrated",
+  "accuracy": 0.978,
+  "cbr_mae": 1.15,
+  "group_index_mae": 0.42,
+  "calibration_factor": 1.034,
+  "samples_calibrated": 142,
+  "last_trained": "2026-06-02T07:06:49Z"
+}

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab - CBR Prediction</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#df7412",
+                      "surface-container-low": "#131b2e",
+                      "on-primary": "#002e6a",
+                      "surface": "#0b1326",
+                      "inverse-primary": "#005ac2",
+                      "on-tertiary-container": "#461f00",
+                      "secondary-fixed": "#acedff",
+                      "surface-dim": "#0b1326",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "outline-variant": "#424754",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-tint": "#adc6ff",
+                      "background": "#0b1326",
+                      "tertiary": "#ffb786",
+                      "error": "#ffb4ab",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-container": "#03b5d3",
+                      "charcoal-bg": "#0F172A",
+                      "on-tertiary-fixed": "#311400",
+                      "error-container": "#93000a",
+                      "data-text": "#94A3B8",
+                      "surface-container-high": "#222a3d",
+                      "emerald-status": "#10B981",
+                      "on-primary-container": "#00285d",
+                      "on-error": "#690005",
+                      "surface-container": "#171f33",
+                      "inverse-on-surface": "#283044",
+                      "primary-container": "#4d8eff",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "secondary": "#4cd7f6",
+                      "surface-variant": "#2d3449",
+                      "outline": "#8c909f",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "on-secondary-container": "#00424e",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "primary-fixed": "#d8e2ff",
+                      "primary": "#adc6ff",
+                      "inverse-surface": "#dae2fd",
+                      "safety-orange": "#F97316",
+                      "on-background": "#dae2fd",
+                      "surface-container-lowest": "#060e20",
+                      "on-surface": "#dae2fd",
+                      "on-secondary-fixed": "#001f26",
+                      "slate-surface": "#1E293B",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-tertiary": "#502400",
+                      "on-secondary": "#003640",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-bright": "#31394d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "panel-split": "50%",
+                      "margin-desktop": "32px",
+                      "gutter": "16px",
+                      "base": "4px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "data-tabular": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "label-mono": ["JetBrains Mono"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-grid-line {
+            stroke: #334155;
+            stroke-width: 1;
+        }
+        .data-point-glow {
+            filter: drop-shadow(0 0 4px #4cd7f6);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b1326; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary/30 flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 sticky left-0 bg-surface-container-low border-r border-outline-variant flex flex-col gap-2 p-4 shrink-0">
+<div class="mb-8 px-2">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+                Soil AI
+            </h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase tracking-widest mt-1">Engineering Modules</p>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">layers</span> Soil Classification
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">grid_on</span> Sieve Analysis
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-secondary font-bold border-r-4 border-secondary transition-all duration-200 ease-in-out bg-surface-container-high/50" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">trending_up</span> CBR Prediction
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">account_tree</span> Stability Analysis
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">foundation</span> Foundation Design
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">vertical_align_bottom</span> Settlement Analysis
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">public</span> Geological Modeling
+            </a>
+<a class="flex items-center gap-3 px-3 py-2.5 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span> AI Image Analysis
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-2 px-2 text-emerald-status text-label-mono">
+<span class="h-2 w-2 rounded-full bg-emerald-status animate-pulse"></span>
+                FastAPI Bridge Connected
+            </div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col relative bg-surface overflow-hidden">
+<!-- Header -->
+<header class="w-full top-0 sticky z-10 flex justify-between items-center px-gutter py-base bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Soil AI Smart Lab</h1>
+<span class="h-4 w-px bg-outline-variant"></span>
+<div class="flex items-center gap-2 text-label-mono text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">biotech</span>
+                    Module 3: CBR Prediction Engine
+                </div>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-surface-container-highest px-4 py-1.5 rounded text-label-mono text-on-surface hover:bg-surface-bright transition-colors flex items-center gap-2 border border-outline-variant">
+<span class="material-symbols-outlined text-[18px]">history</span>
+                    Load Recent
+                </button>
+</div>
+</header>
+<!-- Split Screen Workspace -->
+<div class="flex-grow flex overflow-hidden">
+<!-- Left Panel: Data Entry -->
+<section class="w-2/5 min-w-[400px] border-r border-outline-variant bg-slate-surface flex flex-col p-6 overflow-y-auto">
+<div class="mb-6 flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Input Parameters</h3>
+<p class="font-label-mono text-label-mono text-on-surface-variant">Laboratory Soil Properties</p>
+</div>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-mono text-label-mono shadow-lg shadow-primary/10 hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+                        Pull Lab Data
+                    </button>
+</div>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2">
+                                MDD <span class="text-[10px] text-on-surface-variant">(g/cm³)</span>
+</label>
+<input class="w-full bg-background border border-outline-variant rounded px-3 py-2 text-data-tabular font-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.01" type="number" value="1.84"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2">
+                                OMC <span class="text-[10px] text-on-surface-variant">(%)</span>
+</label>
+<input class="w-full bg-background border border-outline-variant rounded px-3 py-2 text-data-tabular font-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.1" type="number" value="12.5"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2">
+                                Plasticity Index <span class="text-[10px] text-on-surface-variant">(PI)</span>
+</label>
+<input class="w-full bg-background border border-outline-variant rounded px-3 py-2 text-data-tabular font-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="number" value="14"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2">
+                                Fines <span class="text-[10px] text-on-surface-variant">(% &lt; 0.075mm)</span>
+</label>
+<input class="w-full bg-background border border-outline-variant rounded px-3 py-2 text-data-tabular font-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="number" value="32"/>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<h4 class="font-label-mono text-label-mono text-on-surface uppercase tracking-widest mb-4">Material Context</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded border border-outline-variant/50">
+<span class="text-label-mono text-on-surface-variant">Soil Type Prediction</span>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-[11px] font-bold">SC - Clayey Sand</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded border border-outline-variant/50">
+<span class="text-label-mono text-on-surface-variant">AASHTO Classification</span>
+<span class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container rounded text-[11px] font-bold">A-2-6 (0)</span>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<img alt="Soil Sample Preparation" class="w-full h-48 object-cover rounded-xl border border-outline-variant opacity-70 grayscale hover:grayscale-0 transition-all duration-500" data-alt="A macro photograph of a geotechnical laboratory technician carefully preparing a soil sample for a California Bearing Ratio test. The lighting is cold and clinical, focused on the textures of the damp clay and sand mix inside a steel mold. The background is a dark engineering workstation environment with blurred digital displays showing complex data graphs in neon blues and oranges, maintaining a high-tech corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC47azg4OZV8HxWKHbpQLEfga9OTrLUn7jXTJvP88yyQ6MQAJ4Cb82XfclleqMOxHs5DS2kyoh6TX1DArDZ7YVzEwfdyhL7NnyaVVErEWOBgz3BXVsJ2xyzS_5K3r9EqipxeTQu2MnV5uewhvUIFCnoDEi4LSboWH40e51dD1Y8LAz0cnQam6eSsgQ__8KasnamKrznv16rDJOz3J06baY-snFyx5I-698gRyFhkO4R7BZUOpJtlQwU-2CxkwRuAk0MeGb5M8pyYE"/>
+</div>
+</div>
+</section>
+<!-- Right Panel: Simulation Plot -->
+<section class="flex-grow bg-surface-container-lowest flex flex-col p-6 overflow-hidden">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Stress-Penetration Analysis</h3>
+<p class="font-label-mono text-label-mono text-on-surface-variant">Simulation Output: Model-CBR-2024.v4</p>
+</div>
+<div class="bg-surface-container px-4 py-2 rounded-lg border border-outline-variant text-right">
+<div class="text-[10px] text-on-surface-variant uppercase">Predicted CBR Value</div>
+<div class="text-headline-lg font-bold text-secondary">18.4%</div>
+</div>
+</div>
+<!-- Plot Canvas -->
+<div class="flex-grow bg-slate-surface rounded-xl border border-outline-variant relative overflow-hidden flex flex-col">
+<div class="flex items-center justify-between px-4 py-2 bg-surface-container border-b border-outline-variant">
+<div class="flex items-center gap-4 text-label-mono text-[12px]">
+<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-secondary"></span> Prediction Curve</span>
+<span class="flex items-center gap-1.5"><span class="h-2 w-2 rounded-full bg-outline"></span> Standard Baseline</span>
+</div>
+<div class="flex gap-1">
+<button class="p-1 hover:bg-surface-bright rounded text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">zoom_in</span></button>
+<button class="p-1 hover:bg-surface-bright rounded text-on-surface-variant"><span class="material-symbols-outlined text-[18px]">grid_4x4</span></button>
+</div>
+</div>
+<div class="flex-grow relative p-8">
+<!-- SVG Simulated Chart -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 800 400">
+<!-- Grid -->
+<line class="chart-grid-line" x1="0" x2="800" y1="360" y2="360"></line>
+<line class="chart-grid-line" x1="40" x2="40" y1="0" y2="400"></line>
+<line class="chart-grid-line opacity-30" x1="0" x2="800" y1="270" y2="270"></line>
+<line class="chart-grid-line opacity-30" x1="0" x2="800" y1="180" y2="180"></line>
+<line class="chart-grid-line opacity-30" x1="0" x2="800" y1="90" y2="90"></line>
+<line class="chart-grid-line opacity-30" x1="230" x2="230" y1="0" y2="400"></line>
+<line class="chart-grid-line opacity-30" x1="420" x2="420" y1="0" y2="400"></line>
+<line class="chart-grid-line opacity-30" x1="610" x2="610" y1="0" y2="400"></line>
+<!-- Standard Curve (Reference) -->
+<path d="M 40 360 Q 200 350, 400 200 T 760 100" fill="none" stroke="#424754" stroke-dasharray="8 4" stroke-width="2"></path>
+<!-- Prediction Curve -->
+<path class="data-point-glow" d="M 40 360 Q 150 340, 300 220 T 700 80" fill="none" stroke="#4cd7f6" stroke-width="3"></path>
+<!-- Highlight Points -->
+<circle cx="230" cy="275" fill="#4cd7f6" r="4"></circle>
+<circle cx="420" cy="185" fill="#4cd7f6" r="4"></circle>
+<!-- Axes Labels -->
+<text fill="#94A3B8" font-family="JetBrains Mono" font-size="12" text-anchor="middle" x="400" y="390">Penetration (mm)</text>
+<text fill="#94A3B8" font-family="JetBrains Mono" font-size="12" text-anchor="middle" transform="rotate(-90 15,200)" x="15" y="200">Stress (MPa)</text>
+</svg>
+</div>
+<!-- Chart Details Footer -->
+<div class="grid grid-cols-4 border-t border-outline-variant bg-surface-container">
+<div class="p-3 border-r border-outline-variant">
+<div class="text-[10px] text-on-surface-variant uppercase">R-Squared</div>
+<div class="text-data-tabular font-data-tabular text-emerald-status">0.9842</div>
+</div>
+<div class="p-3 border-r border-outline-variant">
+<div class="text-[10px] text-on-surface-variant uppercase">RMSE</div>
+<div class="text-data-tabular font-data-tabular text-on-surface">0.421</div>
+</div>
+<div class="p-3 border-r border-outline-variant">
+<div class="text-[10px] text-on-surface-variant uppercase">Swell (%)</div>
+<div class="text-data-tabular font-data-tabular text-safety-orange">1.2%</div>
+</div>
+<div class="p-3">
+<div class="text-[10px] text-on-surface-variant uppercase">Model Status</div>
+<div class="text-data-tabular font-data-tabular text-on-surface flex items-center gap-1">
+<span class="h-1.5 w-1.5 rounded-full bg-emerald-status"></span> Optimized
+                            </div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Bottom Footer Actions -->
+<footer class="w-full bottom-0 sticky z-20 bg-surface-container-lowest border-t border-outline-variant px-margin-desktop py-4 flex justify-between items-center h-16 shrink-0">
+<div class="text-label-mono text-on-surface-variant flex items-center gap-2">
+<span class="text-tertiary">© 2024 Soil AI Smart Lab</span>
+<span class="opacity-30">|</span>
+<span>Geotechnical Intelligence Systems</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-tertiary font-bold hover:text-tertiary-fixed-dim transition-opacity cursor-pointer flex items-center gap-2 font-label-mono text-label-mono">
+<span class="material-symbols-outlined text-[20px]">csv</span>
+                    Export Graph Data (CSV)
+                </button>
+<span class="h-4 w-px bg-outline-variant"></span>
+<button class="text-tertiary font-bold hover:text-tertiary-fixed-dim transition-opacity cursor-pointer flex items-center gap-2 font-label-mono text-label-mono">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+                    AI Report Generation
+                </button>
+</div>
+</footer>
+</main>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').classList.remove('text-primary');
+            });
+        });
+
+        // Hover effect for the side nav items
+        const navItems = document.querySelectorAll('aside nav a');
+        navItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                if(!item.classList.contains('text-secondary')) {
+                    item.style.paddingLeft = '18px';
+                }
+            });
+            item.addEventListener('mouseleave', () => {
+                if(!item.classList.contains('text-secondary')) {
+                    item.style.paddingLeft = '12px';
+                }
+            });
+        });
+    </script>
+</body></html>

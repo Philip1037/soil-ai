@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab - Foundation Design</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        .splitter-hover:hover {
+            background-color: #3b82f6;
+            cursor: col-resize;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#df7412",
+                        "surface-container-low": "#131b2e",
+                        "on-primary": "#002e6a",
+                        "surface": "#0b1326",
+                        "inverse-primary": "#005ac2",
+                        "on-tertiary-container": "#461f00",
+                        "secondary-fixed": "#acedff",
+                        "surface-dim": "#0b1326",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "outline-variant": "#424754",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-tint": "#adc6ff",
+                        "background": "#0b1326",
+                        "tertiary": "#ffb786",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#2d3449",
+                        "secondary-container": "#03b5d3",
+                        "charcoal-bg": "#0F172A",
+                        "on-tertiary-fixed": "#311400",
+                        "error-container": "#93000a",
+                        "data-text": "#94A3B8",
+                        "surface-container-high": "#222a3d",
+                        "emerald-status": "#10B981",
+                        "on-primary-container": "#00285d",
+                        "on-error": "#690005",
+                        "surface-container": "#171f33",
+                        "inverse-on-surface": "#283044",
+                        "primary-container": "#4d8eff",
+                        "on-primary-fixed": "#001a42",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-fixed-dim": "#4cd7f6",
+                        "secondary": "#4cd7f6",
+                        "surface-variant": "#2d3449",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-secondary-container": "#00424e",
+                        "on-secondary-fixed-variant": "#004e5c",
+                        "primary-fixed": "#d8e2ff",
+                        "primary": "#adc6ff",
+                        "inverse-surface": "#dae2fd",
+                        "safety-orange": "#F97316",
+                        "on-background": "#dae2fd",
+                        "surface-container-lowest": "#060e20",
+                        "on-surface": "#dae2fd",
+                        "on-secondary-fixed": "#001f26",
+                        "slate-surface": "#1E293B",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-tertiary": "#502400",
+                        "on-secondary": "#003640",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-bright": "#31394d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "panel-split": "50%",
+                        "margin-desktop": "32px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "data-tabular": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "label-mono": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky border-b border-outline-variant bg-surface text-primary flex justify-between items-center px-gutter py-base z-50 h-14">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="precision_manufacturing">precision_manufacturing</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Soil AI Smart Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 rounded bg-surface-container-high border border-outline-variant">
+<span class="w-2 h-2 rounded-full bg-emerald-status animate-pulse"></span>
+<span class="font-label-mono text-label-mono text-emerald-status">FastAPI Bridge Connected</span>
+</div>
+<button class="material-symbols-outlined p-2 hover:bg-surface-container-high transition-colors rounded">settings</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold">JD</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer -->
+<nav class="h-screen w-64 sticky left-0 border-r border-outline-variant bg-surface-container-low flex flex-col h-full gap-2 p-4 shrink-0 overflow-y-auto">
+<p class="font-label-mono text-label-mono text-outline mb-2 px-2 uppercase tracking-widest">Engineering Modules</p>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="layers">layers</span>
+                Soil Classification
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="grid_on">grid_on</span>
+                Sieve Analysis
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+                CBR Prediction
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+                Stability Analysis
+            </a>
+<a class="flex items-center gap-3 p-3 rounded bg-surface-container-high text-secondary font-bold border-r-4 border-secondary font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="foundation">foundation</span>
+                Foundation Design
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="vertical_align_bottom">vertical_align_bottom</span>
+                Settlement Analysis
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+                Geological Modeling
+            </a>
+<a class="flex items-center gap-3 p-3 rounded hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant font-label-mono text-label-mono transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                AI Image Analysis
+            </a>
+</nav>
+<!-- Main Content Area: Split-Screen Layout -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Input Data -->
+<section class="w-[450px] bg-slate-surface border-r border-outline-variant overflow-y-auto p-6 flex flex-col gap-6 shrink-0" id="input-panel">
+<div class="flex flex-col gap-2">
+<h2 class="font-headline-md text-headline-md text-primary">Parameters</h2>
+<p class="font-label-mono text-label-mono text-outline">Configure geotechnical variables for bearing capacity.</p>
+</div>
+<!-- Foundation Type Toggle -->
+<div class="bg-surface-container-lowest p-1 rounded-lg flex gap-1 border border-outline-variant">
+<button class="flex-1 py-2 font-label-mono text-label-mono bg-primary text-on-primary rounded font-bold transition-all">Shallow</button>
+<button class="flex-1 py-2 font-label-mono text-label-mono text-on-surface-variant hover:bg-surface-container-high rounded transition-all">Deep</button>
+</div>
+<!-- Dimension Fields -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Structure Load (kN)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="number" value="2500"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Df (Depth m)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.1" type="number" value="1.5"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Width B (m)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.1" type="number" value="2.0"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Length L (m)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.1" type="number" value="2.0"/>
+</div>
+</div>
+<!-- Soil Properties -->
+<div class="flex flex-col gap-4 pt-4 border-t border-outline-variant">
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Soil Type</label>
+<select class="bg-charcoal-bg border border-outline-variant rounded p-2 text-label-mono focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option>Cohesionless (Sand)</option>
+<option selected="">Cohesive (Clay)</option>
+<option>Mixed (Silt/Loam)</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Cohesion (c)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular" type="number" value="25"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Friction Angle (φ)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular" type="number" value="30"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-mono text-[11px] text-outline uppercase">Unit Weight (γ kN/m³)</label>
+<input class="bg-charcoal-bg border border-outline-variant rounded p-2 text-data-tabular" type="number" value="18.5"/>
+</div>
+</div>
+<!-- Calculation Quick View -->
+<div class="mt-auto p-4 rounded bg-surface-container-low border border-outline-variant flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-mono text-sm">Allowable Bearing Capacity</span>
+<span class="text-emerald-status font-bold font-data-tabular">245.8 kPa</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-mono text-sm">Factor of Safety (FoS)</span>
+<span class="text-tertiary font-bold font-data-tabular">3.0</span>
+</div>
+</div>
+</section>
+<!-- Splitter Bar -->
+<div class="w-1 bg-outline-variant hover:bg-primary cursor-col-resize transition-colors duration-200"></div>
+<!-- Right Panel: Visualization -->
+<section class="flex-1 bg-charcoal-bg p-8 flex flex-col gap-6 relative overflow-y-auto">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline-md text-headline-md text-secondary">3D Footing Analysis</h2>
+<p class="font-label-mono text-label-mono text-outline">Real-time Terzaghi Shear Zone visualization.</p>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-highest p-2 rounded hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="view_in_ar">view_in_ar</span>
+</button>
+<button class="bg-surface-container-highest p-2 rounded hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="fullscreen">fullscreen</span>
+</button>
+</div>
+</div>
+<!-- Visualization Canvas -->
+<div class="flex-1 rounded-xl border border-outline-variant bg-surface relative overflow-hidden flex items-center justify-center group">
+<!-- Fake 3D Visualization Element -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, #424754 1px, transparent 0); background-size: 24px 24px;"></div>
+<div class="relative w-full h-full max-h-[500px] flex items-center justify-center">
+<img class="max-w-[80%] max-h-[80%] object-contain drop-shadow-2xl" data-alt="A sophisticated 3D geotechnical engineering visualization of a rectangular concrete footing embedded in a cross-section of layered soil. The diagram illustrates Terzaghi's plastic shear zone with glowing blue vector lines and emerald green stress distribution gradients. The overall aesthetic is dark-slate engineering with high-contrast UI overlays and monospaced data labels. The background is a deep charcoal digital space with a subtle blueprint grid." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAww-Rmj7fl9Rn9OFhEcGa2qpiJchWSgMJ-MYQDv6ZFF5YzP4ded8e6wPwKdczQO9zzDZBy9ehQcdIFvLuzDOrDfwFH-kdmvWXnSasSSctPZF0Oh26XqJUyxEgi2QD3kAVi7E33PvhZKe6cjTYlKJrh3woZlGF79Js2tX_8US5yHG-R80KGqBKY_iHRiAFu3rRLIHEPhT1xdFkdknuPKBpjyuVjfUDOWI6n5ssNqPIiIOT5jkpIMwCMnxMr-KEMQtDUtkZDeXwzPBg"/>
+<!-- HUD Elements -->
+<div class="absolute top-6 left-6 flex flex-col gap-2">
+<div class="flex items-center gap-2 px-3 py-1 bg-slate-900/80 border border-secondary/30 rounded backdrop-blur">
+<span class="text-[10px] text-secondary font-bold uppercase tracking-widest">Stress Pk</span>
+<span class="text-sm font-data-tabular">145.2 kN/m²</span>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-slate-900/80 border border-tertiary/30 rounded backdrop-blur">
+<span class="text-[10px] text-tertiary font-bold uppercase tracking-widest">Shear Z</span>
+<span class="text-sm font-data-tabular">4.25m</span>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 flex flex-col gap-2 items-end">
+<div class="px-3 py-1 bg-surface-container-high/60 border border-outline-variant rounded backdrop-blur flex items-center gap-4">
+<div class="flex flex-col">
+<span class="text-[9px] text-outline">X-ROT</span>
+<span class="text-xs font-data-tabular">45°</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] text-outline">Y-ROT</span>
+<span class="text-xs font-data-tabular">12°</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[9px] text-outline">SCALE</span>
+<span class="text-xs font-data-tabular">1.0x</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Analysis Summary Grid -->
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-1">
+<span class="font-label-mono text-[10px] text-outline uppercase tracking-wider">Ultimate Capacity (q_ult)</span>
+<span class="text-xl font-data-tabular text-on-surface">737.4 <span class="text-xs text-outline">kPa</span></span>
+</div>
+<div class="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-1">
+<span class="font-label-mono text-[10px] text-outline uppercase tracking-wider">Net Safe Capacity (q_ns)</span>
+<span class="text-xl font-data-tabular text-secondary">218.0 <span class="text-xs text-outline">kPa</span></span>
+</div>
+<div class="bg-surface-container border border-outline-variant p-4 rounded flex flex-col gap-1">
+<span class="font-label-mono text-[10px] text-outline uppercase tracking-wider">Design Efficiency</span>
+<div class="flex items-center gap-3">
+<div class="flex-1 h-2 bg-charcoal-bg rounded-full overflow-hidden">
+<div class="h-full bg-emerald-status" style="width: 78%"></div>
+</div>
+<span class="text-sm font-data-tabular">78%</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full bg-surface-container-lowest text-tertiary border-t border-outline-variant flex justify-between items-center px-margin-desktop py-4 h-16 shrink-0 relative z-50">
+<p class="font-label-mono text-label-mono text-on-surface-variant">© 2024 Soil AI Smart Lab - Geotechnical Intelligence Systems</p>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 rounded border border-outline-variant hover:text-tertiary-fixed-dim hover:bg-surface-container-high transition-all text-label-mono font-label-mono cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                Export Graph Data (CSV)
+            </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded bg-tertiary text-on-tertiary hover:opacity-90 transition-all text-label-mono font-bold font-label-mono cursor-pointer">
+<span class="material-symbols-outlined text-sm" data-icon="auto_awesome">auto_awesome</span>
+                AI Report Generation
+            </button>
+</div>
+</footer>
+<script>
+        // Simple Interaction logic for panels
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Mock recalculation effect
+                const summary = document.querySelectorAll('.font-data-tabular');
+                summary.forEach(el => {
+                    el.classList.add('animate-pulse');
+                    setTimeout(() => el.classList.remove('animate-pulse'), 1000);
+                });
+            });
+        });
+
+        // Toggle logic for foundation type
+        const toggleButtons = document.querySelectorAll('.bg-surface-container-lowest button');
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggleButtons.forEach(b => {
+                    b.classList.remove('bg-primary', 'text-on-primary', 'font-bold');
+                    b.classList.add('text-on-surface-variant');
+                });
+                btn.classList.add('bg-primary', 'text-on-primary', 'font-bold');
+                btn.classList.remove('text-on-surface-variant');
+            });
+        });
+    </script>
+</body></html>

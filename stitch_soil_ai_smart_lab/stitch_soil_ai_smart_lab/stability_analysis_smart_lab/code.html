@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soil AI Smart Lab - Stability Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#df7412",
+                      "surface-container-low": "#131b2e",
+                      "on-primary": "#002e6a",
+                      "surface": "#0b1326",
+                      "inverse-primary": "#005ac2",
+                      "on-tertiary-container": "#461f00",
+                      "secondary-fixed": "#acedff",
+                      "surface-dim": "#0b1326",
+                      "tertiary-fixed-dim": "#ffb786",
+                      "outline-variant": "#424754",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-tint": "#adc6ff",
+                      "background": "#0b1326",
+                      "tertiary": "#ffb786",
+                      "error": "#ffb4ab",
+                      "surface-container-highest": "#2d3449",
+                      "secondary-container": "#03b5d3",
+                      "charcoal-bg": "#0F172A",
+                      "on-tertiary-fixed": "#311400",
+                      "error-container": "#93000a",
+                      "data-text": "#94A3B8",
+                      "surface-container-high": "#222a3d",
+                      "emerald-status": "#10B981",
+                      "on-primary-container": "#00285d",
+                      "on-error": "#690005",
+                      "surface-container": "#171f33",
+                      "inverse-on-surface": "#283044",
+                      "primary-container": "#4d8eff",
+                      "on-primary-fixed": "#001a42",
+                      "on-error-container": "#ffdad6",
+                      "on-surface-variant": "#c2c6d6",
+                      "secondary-fixed-dim": "#4cd7f6",
+                      "secondary": "#4cd7f6",
+                      "surface-variant": "#2d3449",
+                      "outline": "#8c909f",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "on-secondary-container": "#00424e",
+                      "on-secondary-fixed-variant": "#004e5c",
+                      "primary-fixed": "#d8e2ff",
+                      "primary": "#adc6ff",
+                      "inverse-surface": "#dae2fd",
+                      "safety-orange": "#F97316",
+                      "on-background": "#dae2fd",
+                      "surface-container-lowest": "#060e20",
+                      "on-surface": "#dae2fd",
+                      "on-secondary-fixed": "#001f26",
+                      "slate-surface": "#1E293B",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-tertiary": "#502400",
+                      "on-secondary": "#003640",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-bright": "#31394d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "panel-split": "50%",
+                      "margin-desktop": "32px",
+                      "gutter": "16px",
+                      "base": "4px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "headline-xl": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "data-tabular": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "label-mono": ["JetBrains Mono"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-xl": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "data-tabular": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0b1326; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .split-pane { transition: width 0.2s ease; }
+        .grid-bg {
+            background-image: radial-gradient(circle, #334155 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        @keyframes pulse-emerald {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+        .animate-pulse-emerald { animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-surface border-b border-outline-variant flex justify-between items-center px-gutter py-base z-50">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-md" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Soil AI Smart Lab</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-high rounded-full">
+<span class="w-2 h-2 bg-emerald-status rounded-full animate-pulse-emerald"></span>
+<span class="font-label-mono text-label-mono text-emerald-status">FastAPI Bridge Connected</span>
+</div>
+<button class="material-symbols-outlined p-2 hover:bg-surface-container-high transition-colors rounded-full text-on-surface-variant">settings</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="h-full w-64 sticky left-0 bg-surface-container-low border-r border-outline-variant flex flex-col gap-2 p-4 shrink-0 overflow-y-auto">
+<h2 class="font-label-mono text-label-mono text-outline px-2 py-4">Engineering Modules</h2>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-mono text-label-mono">Soil Classification</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">grid_on</span>
+<span class="font-label-mono text-label-mono">Sieve Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-mono text-label-mono">CBR Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-secondary font-bold border-r-4 border-secondary bg-surface-container-high transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="font-label-mono text-label-mono">Stability Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">foundation</span>
+<span class="font-label-mono text-label-mono">Foundation Design</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">vertical_align_bottom</span>
+<span class="font-label-mono text-label-mono">Settlement Analysis</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">public</span>
+<span class="font-label-mono text-label-mono">Geological Modeling</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-mono text-label-mono">AI Image Analysis</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area (Split Screen) -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Panel: Data Inputs -->
+<section class="w-[400px] border-r border-outline-variant bg-slate-surface flex flex-col shrink-0 overflow-y-auto">
+<div class="p-6 space-y-6">
+<div class="space-y-1">
+<h3 class="font-headline-md text-on-surface">Parameter Configuration</h3>
+<p class="font-label-mono text-data-text">Set boundary conditions for slip circle analysis.</p>
+</div>
+<div class="space-y-4">
+<!-- Input Group -->
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Analysis Type</label>
+<select class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all">
+<option>Bishop's Simplified Method</option>
+<option>Fellenius (Ordinary Method)</option>
+<option>Janbu's Simplified</option>
+<option>Morgenstern-Price</option>
+</select>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Slope Angle (°)</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary outline-none font-data-tabular" type="number" value="35"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Height (m)</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary outline-none font-data-tabular" type="number" value="12.5"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Cohesion (kPa)</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary outline-none font-data-tabular" type="number" value="15"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Friction Angle (°)</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary outline-none font-data-tabular" type="number" value="28"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Unit Weight (kN/m³)</label>
+<input class="w-full bg-surface border border-outline-variant text-on-surface px-4 py-2 rounded focus:ring-2 focus:ring-primary outline-none font-data-tabular" type="number" value="19.2"/>
+</div>
+<div class="space-y-2">
+<label class="font-label-mono text-secondary text-[12px] uppercase tracking-wider">Water Table Depth (m)</label>
+<input class="w-full accent-secondary bg-surface rounded-lg cursor-pointer h-2" max="25" min="0" type="range" value="8"/>
+<div class="flex justify-between text-[11px] font-label-mono text-on-surface-variant">
+<span>0m (Surface)</span>
+<span>8.0m Current</span>
+<span>25m (Dry)</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary font-bold py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-container transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">calculate</span>
+                        RUN STABILITY SIMULATION
+                    </button>
+<div class="p-4 bg-surface-container-high border border-outline-variant rounded-lg space-y-3">
+<div class="flex justify-between items-center">
+<span class="font-label-mono text-on-surface-variant">Factor of Safety (FoS)</span>
+<span class="font-data-tabular text-headline-md text-emerald-status">1.42</span>
+</div>
+<div class="h-2 w-full bg-surface rounded-full overflow-hidden">
+<div class="h-full bg-emerald-status w-[71%]"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant italic">Confidence interval: ±0.05 based on Bishop's Method.</p>
+</div>
+</div>
+</section>
+<!-- Right Panel: Visualization -->
+<section class="flex-1 bg-surface relative flex flex-col overflow-hidden">
+<div class="absolute top-4 left-6 z-10 flex gap-4">
+<div class="px-3 py-1 bg-surface-container-highest/80 backdrop-blur border border-outline-variant rounded text-[12px] font-label-mono flex items-center gap-2">
+<span class="w-2 h-2 bg-secondary rounded-full"></span>
+                        Potential Slip Surface
+                    </div>
+<div class="px-3 py-1 bg-surface-container-highest/80 backdrop-blur border border-outline-variant rounded text-[12px] font-label-mono flex items-center gap-2">
+<span class="w-2 h-2 bg-safety-orange rounded-full"></span>
+                        Phreatic Line
+                    </div>
+</div>
+<div class="flex-1 grid-bg flex items-center justify-center p-12 overflow-hidden">
+<div class="w-full max-w-4xl aspect-[16/9] relative border-l-4 border-b-4 border-outline p-4">
+<!-- Slope Visualization -->
+<svg class="w-full h-full drop-shadow-2xl" viewbox="0 0 800 450">
+<!-- Soil Layer -->
+<path d="M 0 450 L 200 450 L 500 150 L 800 150 L 800 450 Z" fill="#1e293b" stroke="#334155" stroke-width="2"></path>
+<!-- Slip Circle Arc -->
+<path d="M 300 350 Q 550 400 650 150" fill="none" stroke="#4cd7f6" stroke-dasharray="8 4" stroke-width="4"></path>
+<!-- Water Table -->
+<line stroke="#f97316" stroke-dasharray="4 4" stroke-width="2" x1="0" x2="800" y1="380" y2="380"></line>
+<!-- AI Slice Indicators -->
+<g opacity="0.3">
+<line stroke="#4cd7f6" x1="320" x2="320" y1="350" y2="330"></line>
+<line stroke="#4cd7f6" x1="360" x2="360" y1="360" y2="310"></line>
+<line stroke="#4cd7f6" x1="400" x2="400" y1="370" y2="250"></line>
+<line stroke="#4cd7f6" x1="440" x2="440" y1="375" y2="210"></line>
+</g>
+<!-- Labels -->
+<text fill="#adc6ff" font-family="JetBrains Mono" font-size="14" x="600" y="140">EL: +12.5m</text>
+<text fill="#adc6ff" font-family="JetBrains Mono" font-size="14" x="210" y="440">EL: 0.0m</text>
+</svg>
+</div>
+</div>
+<!-- Footer Internal to Canvas for Graph Legend -->
+<div class="absolute bottom-4 right-6 flex gap-2">
+<button class="p-2 bg-surface-container-high hover:bg-primary/20 border border-outline-variant rounded transition-all material-symbols-outlined text-primary">zoom_in</button>
+<button class="p-2 bg-surface-container-high hover:bg-primary/20 border border-outline-variant rounded transition-all material-symbols-outlined text-primary">zoom_out</button>
+<button class="p-2 bg-surface-container-high hover:bg-primary/20 border border-outline-variant rounded transition-all material-symbols-outlined text-primary">pan_tool</button>
+<button class="p-2 bg-surface-container-high hover:bg-primary/20 border border-outline-variant rounded transition-all material-symbols-outlined text-primary">layers</button>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer -->
+<footer class="w-full bottom-0 bg-surface-container-lowest border-t border-outline-variant flex justify-between items-center px-margin-desktop h-16 shrink-0 z-50">
+<div class="flex items-center gap-4">
+<span class="font-body-md text-on-surface-variant font-label-mono">© 2024 Soil AI Smart Lab - Geotechnical Intelligence Systems</span>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:text-tertiary-fixed-dim transition-opacity cursor-pointer font-label-mono">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                Export Graph Data (CSV)
+            </button>
+<div class="h-6 w-[1px] bg-outline-variant self-center"></div>
+<button class="flex items-center gap-2 px-4 py-2 text-tertiary font-bold hover:text-tertiary-fixed-dim transition-opacity cursor-pointer font-label-mono">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                AI Report Generation
+            </button>
+</div>
+</footer>
+<script>
+        // Simple micro-interactions for inputs
+        const inputs = document.querySelectorAll('input[type="number"], select');
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Mock calculation trigger effect
+                const canvas = document.querySelector('svg');
+                canvas.classList.add('opacity-50');
+                setTimeout(() => {
+                    canvas.classList.remove('opacity-50');
+                }, 300);
+            });
+        });
+
+        // Toggle Active State logic - Already handled by hardcoding 'Stability Analysis' as requested.
+    </script>
+</body></html>
